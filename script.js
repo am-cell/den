@@ -2,8 +2,9 @@ import * as THREE from './three.module.js';
 import { GLTFLoader } from './GLTFLoader.js';
 import { OrbitControls } from './OrbitControls.js';
 
-let mixer, avatar, waveAction;
+let avatar, rightArm, rightForearm;
 let speechBubble = document.createElement('div');
+let hasPlayedIntro = false;
 
 // Scene setup
 const scene = new THREE.Scene();
@@ -45,32 +46,131 @@ loader.load('avatar.glb', function (gltf) {
   avatar.scale.set(1.3, 1.3, 1.3);
   scene.add(avatar);
 
-  // Animations
-  mixer = new THREE.AnimationMixer(avatar);
-  const clips = gltf.animations;
+  // Find arm bones for waving animation
+  avatar.traverse((child) => {
+    if (child.isBone) {
+      const name = child.name.toLowerCase();
+      // Look for right arm bones
+      if (name.includes('rightarm') || name.includes('right_arm') || 
+          name.includes('arm.r') || name.includes('upperarm_r') ||
+          name.includes('shoulder_r') || name.includes('rightshoulder')) {
+        rightArm = child;
+      }
+      // Look for right forearm bones
+      if (name.includes('rightforearm') || name.includes('right_forearm') || 
+          name.includes('forearm.r') || name.includes('lowerarm_r') ||
+          name.includes('righthand') || name.includes('right_hand')) {
+        rightForearm = child;
+      }
+    }
+  });
 
-  // Try to find a clip with "wave" in the name
-  waveAction = mixer.clipAction(clips.find(clip => clip.name.toLowerCase().includes('wave')));
+  console.log('Right arm found:', rightArm ? rightArm.name : 'Not found');
+  console.log('Right forearm found:', rightForearm ? rightForearm.name : 'Not found');
+
+  // Start the intro sequence after avatar loads
+  setTimeout(() => {
+    playIntroSequence();
+  }, 500);
+  
 }, undefined, function (error) {
   console.error(error);
 });
 
-// Speech Bubble (style itttt 😍)
-speechBubble.textContent = 'Hi 💖';
+// Speech Bubble setup
 speechBubble.style.position = 'absolute';
-speechBubble.style.top = '20px';
-speechBubble.style.left = '50%';
-speechBubble.style.transform = 'translateX(-50%)';
-speechBubble.style.padding = '10px 20px';
-speechBubble.style.borderRadius = '20px';
-speechBubble.style.background = '#fff3f8';
-speechBubble.style.color = '#e91e63';
+speechBubble.style.top = '15%';
+speechBubble.style.right = '10%';
+speechBubble.style.padding = '15px 25px';
+speechBubble.style.borderRadius = '25px';
+speechBubble.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+speechBubble.style.color = 'white';
 speechBubble.style.fontWeight = 'bold';
-speechBubble.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+speechBubble.style.fontSize = '18px';
+speechBubble.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3)';
 speechBubble.style.display = 'none';
+speechBubble.style.zIndex = '1000';
+speechBubble.style.opacity = '0';
+speechBubble.style.transform = 'translateY(20px) scale(0.8)';
+speechBubble.style.transition = 'all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+speechBubble.style.maxWidth = '300px';
+speechBubble.style.textAlign = 'center';
 document.body.appendChild(speechBubble);
 
-// Raycaster for hover detection
+// Intro sequence function
+function playIntroSequence() {
+  if (hasPlayedIntro || !avatar) return;
+  hasPlayedIntro = true;
+
+  // Show speech bubble with welcome message
+  speechBubble.textContent = 'Hi there! 👋 Welcome to my wonderland! ✨';
+  speechBubble.style.display = 'block';
+  
+  setTimeout(() => {
+    speechBubble.style.opacity = '1';
+    speechBubble.style.transform = 'translateY(0) scale(1)';
+  }, 100);
+
+  // Start waving animation
+  startWaveAnimation();
+
+  // Hide speech bubble after 5 seconds
+  setTimeout(() => {
+    speechBubble.style.opacity = '0';
+    speechBubble.style.transform = 'translateY(-20px) scale(0.8)';
+    setTimeout(() => {
+      speechBubble.style.display = 'none';
+    }, 500);
+  }, 5000);
+}
+
+// Custom wave animation function
+function startWaveAnimation() {
+  const waveStartTime = Date.now();
+  const waveDuration = 3000; // 3 seconds of waving
+  const waveSpeed = 4; // Wave cycles per second
+
+  function animateWave() {
+    const elapsed = Date.now() - waveStartTime;
+    const progress = elapsed / waveDuration;
+    
+    if (progress >= 1) {
+      // Reset arm positions to original
+      if (rightArm) {
+        rightArm.rotation.z = 0;
+        rightArm.rotation.x = 0;
+      }
+      if (rightForearm) {
+        rightForearm.rotation.z = 0;
+        rightForearm.rotation.x = 0;
+      }
+      return; // Animation complete
+    }
+
+    const waveTime = elapsed / 1000; // Convert to seconds
+    const intensity = Math.sin(progress * Math.PI); // Fade in and out
+
+    // Animate right arm (shoulder)
+    if (rightArm) {
+      rightArm.rotation.z = Math.sin(waveTime * waveSpeed * Math.PI) * 0.8 * intensity;
+      rightArm.rotation.x = Math.sin(waveTime * waveSpeed * Math.PI * 0.5) * 0.3 * intensity;
+    }
+
+    // Animate right forearm (elbow)
+    if (rightForearm) {
+      rightForearm.rotation.z = Math.sin(waveTime * waveSpeed * Math.PI + Math.PI/4) * 0.6 * intensity;
+    }
+
+    // Add slight body movement
+    avatar.rotation.y = Math.sin(waveTime * 2) * 0.05 * intensity;
+
+    requestAnimationFrame(animateWave);
+  }
+
+  animateWave();
+}
+
+// Raycaster for hover detection (optional - for future interactions)
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
@@ -86,25 +186,10 @@ const clock = new THREE.Clock();
 function animate() {
   requestAnimationFrame(animate);
 
-  const delta = clock.getDelta();
-  if (mixer) mixer.update(delta);
-
-  if (avatar) {
-    // Raycast to detect hover
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObject(avatar, true);
-
-    if (intersects.length > 0) {
-      // Show text
-      speechBubble.style.display = 'block';
-
-      // Play wave animation if available
-      if (waveAction && !waveAction.isRunning()) {
-        waveAction.reset().play();
-      }
-    } else {
-      speechBubble.style.display = 'none';
-    }
+  // Add subtle idle breathing animation after intro
+  if (avatar && hasPlayedIntro) {
+    const time = clock.getElapsedTime();
+    avatar.position.y += Math.sin(time * 1.5) * 0.002; // Gentle breathing
   }
 
   renderer.render(scene, camera);
