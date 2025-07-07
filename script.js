@@ -2,9 +2,9 @@ import * as THREE from './three.module.js';
 import { GLTFLoader } from './GLTFLoader.js';
 import { OrbitControls } from './OrbitControls.js';
 
-let avatar, rightArm, rightForearm;
+let avatar, rightArm, leftArm, rightForearm, leftForearm;
 let speechBubble = document.createElement('div');
-let hasPlayedIntro = false;
+let hasPlayedChickenIntro = false;
 
 // Scene setup
 const scene = new THREE.Scene();
@@ -46,15 +46,22 @@ loader.load('avatar.glb', function (gltf) {
   avatar.scale.set(1.3, 1.3, 1.3);
   scene.add(avatar);
 
-  // Find arm bones for waving animation
+  // Find arm bones for chicken flapping animation
   avatar.traverse((child) => {
     if (child.isBone) {
       const name = child.name.toLowerCase();
+      
       // Look for right arm bones
       if (name.includes('rightarm') || name.includes('right_arm') || 
           name.includes('arm.r') || name.includes('upperarm_r') ||
           name.includes('shoulder_r') || name.includes('rightshoulder')) {
         rightArm = child;
+      }
+      // Look for left arm bones
+      if (name.includes('leftarm') || name.includes('left_arm') || 
+          name.includes('arm.l') || name.includes('upperarm_l') ||
+          name.includes('shoulder_l') || name.includes('leftshoulder')) {
+        leftArm = child;
       }
       // Look for right forearm bones
       if (name.includes('rightforearm') || name.includes('right_forearm') || 
@@ -62,15 +69,23 @@ loader.load('avatar.glb', function (gltf) {
           name.includes('righthand') || name.includes('right_hand')) {
         rightForearm = child;
       }
+      // Look for left forearm bones
+      if (name.includes('leftforearm') || name.includes('left_forearm') || 
+          name.includes('forearm.l') || name.includes('lowerarm_l') ||
+          name.includes('lefthand') || name.includes('left_hand')) {
+        leftForearm = child;
+      }
     }
   });
 
   console.log('Right arm found:', rightArm ? rightArm.name : 'Not found');
+  console.log('Left arm found:', leftArm ? leftArm.name : 'Not found');
   console.log('Right forearm found:', rightForearm ? rightForearm.name : 'Not found');
+  console.log('Left forearm found:', leftForearm ? leftForearm.name : 'Not found');
 
-  // Start the intro sequence after avatar loads
+  // Start the chicken intro sequence after avatar loads
   setTimeout(() => {
-    playIntroSequence();
+    playChickenIntroSequence();
   }, 500);
   
 }, undefined, function (error) {
@@ -83,91 +98,144 @@ speechBubble.style.top = '15%';
 speechBubble.style.right = '10%';
 speechBubble.style.padding = '15px 25px';
 speechBubble.style.borderRadius = '25px';
-speechBubble.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+speechBubble.style.background = 'linear-gradient(135deg, #ff6b6b 0%, #feca57 100%)';
 speechBubble.style.color = 'white';
 speechBubble.style.fontWeight = 'bold';
-speechBubble.style.fontSize = '18px';
+speechBubble.style.fontSize = '22px';
 speechBubble.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3)';
 speechBubble.style.display = 'none';
 speechBubble.style.zIndex = '1000';
 speechBubble.style.opacity = '0';
 speechBubble.style.transform = 'translateY(20px) scale(0.8)';
-speechBubble.style.transition = 'all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
-speechBubble.style.maxWidth = '300px';
+speechBubble.style.transition = 'all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+speechBubble.style.maxWidth = '250px';
 speechBubble.style.textAlign = 'center';
+speechBubble.style.fontFamily = 'Comic Sans MS, cursive';
 document.body.appendChild(speechBubble);
 
-// Intro sequence function
-function playIntroSequence() {
-  if (hasPlayedIntro || !avatar) return;
-  hasPlayedIntro = true;
+// Chicken intro sequence function
+function playChickenIntroSequence() {
+  if (hasPlayedChickenIntro || !avatar) return;
+  hasPlayedChickenIntro = true;
 
-  // Show speech bubble with welcome message
-  speechBubble.textContent = 'Hi there! 👋 Welcome to my wonderland! ✨';
+  // Array of chicken sounds and messages
+  const chickenMessages = [
+    'QUACK QUACK! 🐔',
+    'BAWK BAWK! 🐓',
+    'CLUCK CLUCK! 🐔',
+    'QUACK! 🐣'
+  ];
+
+  let messageIndex = 0;
+  
+  // Show first message
+  showChickenMessage(chickenMessages[messageIndex]);
+  
+  // Start the chicken flapping animation
+  startChickenFlapping();
+
+  // Change messages every 800ms
+  const messageInterval = setInterval(() => {
+    messageIndex++;
+    if (messageIndex < chickenMessages.length) {
+      showChickenMessage(chickenMessages[messageIndex]);
+    } else {
+      clearInterval(messageInterval);
+      // Hide final message after 1.5 seconds
+      setTimeout(() => {
+        hideChickenMessage();
+      }, 1500);
+    }
+  }, 800);
+}
+
+// Show chicken message function
+function showChickenMessage(message) {
+  speechBubble.textContent = message;
   speechBubble.style.display = 'block';
   
   setTimeout(() => {
     speechBubble.style.opacity = '1';
     speechBubble.style.transform = 'translateY(0) scale(1)';
-  }, 100);
-
-  // Start waving animation
-  startWaveAnimation();
-
-  // Hide speech bubble after 5 seconds
-  setTimeout(() => {
-    speechBubble.style.opacity = '0';
-    speechBubble.style.transform = 'translateY(-20px) scale(0.8)';
-    setTimeout(() => {
-      speechBubble.style.display = 'none';
-    }, 500);
-  }, 5000);
+  }, 50);
 }
 
-// Custom wave animation function
-function startWaveAnimation() {
-  const waveStartTime = Date.now();
-  const waveDuration = 3000; // 3 seconds of waving
-  const waveSpeed = 4; // Wave cycles per second
+// Hide chicken message function
+function hideChickenMessage() {
+  speechBubble.style.opacity = '0';
+  speechBubble.style.transform = 'translateY(-20px) scale(0.8)';
+  setTimeout(() => {
+    speechBubble.style.display = 'none';
+  }, 300);
+}
 
-  function animateWave() {
-    const elapsed = Date.now() - waveStartTime;
-    const progress = elapsed / waveDuration;
+// Custom chicken flapping animation function
+function startChickenFlapping() {
+  const flapStartTime = Date.now();
+  const flapDuration = 4000; // 4 seconds of flapping
+  const flapSpeed = 8; // Fast flapping like a chicken!
+
+  function animateFlap() {
+    const elapsed = Date.now() - flapStartTime;
+    const progress = elapsed / flapDuration;
     
     if (progress >= 1) {
       // Reset arm positions to original
-      if (rightArm) {
-        rightArm.rotation.z = 0;
-        rightArm.rotation.x = 0;
-      }
-      if (rightForearm) {
-        rightForearm.rotation.z = 0;
-        rightForearm.rotation.x = 0;
-      }
+      resetArmPositions();
       return; // Animation complete
     }
 
-    const waveTime = elapsed / 1000; // Convert to seconds
+    const flapTime = elapsed / 1000; // Convert to seconds
     const intensity = Math.sin(progress * Math.PI); // Fade in and out
 
-    // Animate right arm (shoulder)
+    // Chicken-like flapping motion
+    const flapAngle = Math.sin(flapTime * flapSpeed * Math.PI);
+    const quickFlap = Math.sin(flapTime * flapSpeed * Math.PI * 2) * 0.3;
+
+    // Animate both arms like chicken wings
     if (rightArm) {
-      rightArm.rotation.z = Math.sin(waveTime * waveSpeed * Math.PI) * 0.8 * intensity;
-      rightArm.rotation.x = Math.sin(waveTime * waveSpeed * Math.PI * 0.5) * 0.3 * intensity;
+      rightArm.rotation.z = flapAngle * 1.2 * intensity; // Big flapping motion
+      rightArm.rotation.x = quickFlap * 0.5 * intensity; // Quick up-down
+    }
+    if (leftArm) {
+      leftArm.rotation.z = -flapAngle * 1.2 * intensity; // Opposite direction
+      leftArm.rotation.x = quickFlap * 0.5 * intensity; // Quick up-down
     }
 
-    // Animate right forearm (elbow)
+    // Animate forearms for more realistic wing motion
     if (rightForearm) {
-      rightForearm.rotation.z = Math.sin(waveTime * waveSpeed * Math.PI + Math.PI/4) * 0.6 * intensity;
+      rightForearm.rotation.z = flapAngle * 0.8 * intensity;
+    }
+    if (leftForearm) {
+      leftForearm.rotation.z = -flapAngle * 0.8 * intensity;
     }
 
-    // Add slight body movement
-    avatar.rotation.y = Math.sin(waveTime * 2) * 0.05 * intensity;
+    // Add chicken-like body bobbing
+    avatar.position.y += Math.sin(flapTime * flapSpeed * Math.PI) * 0.02 * intensity;
+    avatar.rotation.y = Math.sin(flapTime * 4) * 0.1 * intensity; // Head bobbing
 
-    requestAnimationFrame(animateWave);
+    requestAnimationFrame(animateFlap);
   }
 
-  animateWave();
+  animateFlap();
+}
+
+// Reset arm positions function
+function resetArmPositions() {
+  if (rightArm) {
+    rightArm.rotation.z = 0;
+    rightArm.rotation.x = 0;
+  }
+  if (leftArm) {
+    leftArm.rotation.z = 0;
+    leftArm.rotation.x = 0;
+  }
+  if (rightForearm) {
+    rightForearm.rotation.z = 0;
+  }
+  if (leftForearm) {
+    leftForearm.rotation.z = 0;
+  }
 }
 
 // Raycaster for hover detection (optional - for future interactions)
@@ -186,15 +254,44 @@ const clock = new THREE.Clock();
 function animate() {
   requestAnimationFrame(animate);
 
-  // Add subtle idle breathing animation after intro
-  if (avatar && hasPlayedIntro) {
+  // Add subtle idle breathing animation after chicken intro
+  if (avatar && hasPlayedChickenIntro) {
     const time = clock.getElapsedTime();
-    avatar.position.y += Math.sin(time * 1.5) * 0.002; // Gentle breathing
+    avatar.position.y += Math.sin(time * 1.5) * 0.001; // Very gentle breathing
+  }
+
+  // Easter egg: Click to make chicken again!
+  if (avatar && hasPlayedChickenIntro) {
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObject(avatar, true);
+
+    if (intersects.length > 0) {
+      // Change cursor to indicate clickable
+      document.body.style.cursor = 'pointer';
+    } else {
+      document.body.style.cursor = 'default';
+    }
   }
 
   renderer.render(scene, camera);
 }
 animate();
+
+// Click event for bonus chicken action
+window.addEventListener('click', (event) => {
+  if (avatar && hasPlayedChickenIntro) {
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObject(avatar, true);
+
+    if (intersects.length > 0) {
+      // Quick chicken sound on click
+      showChickenMessage('BAWK! 🐓');
+      setTimeout(() => {
+        hideChickenMessage();
+      }, 1000);
+    }
+  }
+});
 
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
