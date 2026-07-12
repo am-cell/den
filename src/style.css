@@ -751,3 +751,55 @@ body {
     .nav-bar, .avatar-stage, .resume-tabs, .resume-actions, .nav-buttons { display: none !important; }
     .resume-section { display: block !important; }
 }
+
+/* ============ ROAMING AVATAR ============ */
+.roamer {
+    position: fixed;
+    z-index: 900;
+    cursor: pointer;
+    display: none;
+    will-change: transform;
+}
+
+.roamer img {
+    width: 100%;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+    filter: drop-shadow(0 10px 14px rgba(60, 50, 100, 0.3));
+}
+
+.roamer.walking .roamer-waddle {
+    animation: waddle 0.55s ease-in-out infinite;
+    transform-origin: 50% 92%;
+}
+
+.roamer-bubble {
+    position: absolute;
+    top: -2.6rem;
+    left: 50%;
+    transform: translateX(-50%) scale(0.8);
+    background: var(--paper);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    border-radius: 14px;
+    padding: 0.35rem 0.8rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    opacity: 0;
+    transition: all 0.25s ease;
+    pointer-events: none;
+}
+
+.roamer-bubble.show {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+}
+
+@keyframes waddle {
+    0%, 100% { transform: rotate(-4.5deg) translateY(0); }
+    25% { transform: rotate(0deg) translateY(-5px); }
+    50% { transform: rotate(4.5deg) translateY(0); }
+    75% { transform: rotate(0deg) translateY(-5px); }
+}

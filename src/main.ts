@@ -4,6 +4,7 @@ import { initAvatar } from './avatar';
 import { initResume } from './resume';
 import { initFilters } from './filters';
 import { initEasterEggs } from './easter-eggs';
+import { initRoamer } from './roamer';
 
 document.addEventListener('DOMContentLoaded', () => {
   initPages();
@@ -11,4 +12,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initResume();
   initFilters();
   initEasterEggs();
+  initRoamer();
 });
