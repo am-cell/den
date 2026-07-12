@@ -4,4 +4,5 @@ import { defineConfig } from 'vite';
 // opening dist/index.html straight from disk.
 export default defineConfig({
   base: './',
+  assetsInclude: ['**/*.glb'],
 });

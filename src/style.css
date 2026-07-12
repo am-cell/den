@@ -119,19 +119,20 @@ body {
 
 .avatar-frame {
     position: relative;
-    width: min(340px, 82%);
+    width: min(400px, 92%);
     cursor: pointer;
-    transition: transform 0.15s ease-out;
-    animation: gentleBob 4s ease-in-out infinite;
     will-change: transform;
 }
 
-.avatar-frame img {
+#avatar-3d {
     width: 100%;
+    aspect-ratio: 3 / 4;
+}
+
+#avatar-3d canvas {
+    width: 100% !important;
+    height: 100% !important;
     display: block;
-    user-select: none;
-    -webkit-user-drag: none;
-    filter: drop-shadow(0 22px 28px rgba(102, 126, 234, 0.3));
 }
 
 .avatar-frame.wiggle { animation: earTwitch 0.5s ease-in-out; }

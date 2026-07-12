@@ -13,4 +13,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initFilters();
   initEasterEggs();
   initRoamer();
+  void import('./avatar3d').then((m) => m.initAvatar3D());
 });

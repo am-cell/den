@@ -1,5 +1,3 @@
-import avatarUrl from './avatar.svg';
-
 const INTRO_MESSAGES = ['Hello~ 😽', "How YOU doin'? 😏"];
 
 const PET_MESSAGES = [
@@ -83,20 +81,6 @@ function onPet(): void {
   spawnHeart();
 }
 
-function initTilt(): void {
-  stage().addEventListener('mousemove', (e) => {
-    const rect = frame().getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    frame().style.transform = `rotateY(${x * 10}deg) rotateX(${-y * 8}deg)`;
-    frame().style.animationPlayState = 'paused';
-  });
-  stage().addEventListener('mouseleave', () => {
-    frame().style.transform = '';
-    frame().style.animationPlayState = 'running';
-  });
-}
-
 function initIdleChatter(): void {
   window.setInterval(() => {
     const homeActive = document.getElementById('home')!.classList.contains('active');
@@ -154,9 +138,7 @@ function spawnClouds(): void {
 }
 
 export function initAvatar(): void {
-  (document.getElementById('avatar-img') as HTMLImageElement).src = avatarUrl;
   frame().addEventListener('click', onPet);
-  initTilt();
   initIdleChatter();
   spawnSootSprites();
   spawnClouds();
