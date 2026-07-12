@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ammar irfan's - Portfolio</title>
+    <title>Ammar Irfan — Portfolio</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --purple: #667eea;
+            --violet: #764ba2;
+            --deep-purple: #6b46c1;
+            --paper: #ffffff;
+            --ink: #2d3748;
         }
 
         body {
@@ -18,113 +22,72 @@
             overflow-x: hidden;
         }
 
-        /* Home Page Styles */
+        /* ============ HOME PAGE (Ghibli warm palette) ============ */
         .home-page {
             min-height: 100vh;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
+            padding: 5rem 2rem 2rem;
+            position: relative;
+            overflow: hidden;
         }
 
         .home-container {
             max-width: 1200px;
             width: 100%;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 3rem;
             align-items: center;
+            position: relative;
+            z-index: 2;
         }
 
-        .home-content {
-            animation: fadeInUp 0.8s ease-out;
-        }
+        .home-content { animation: fadeInUp 0.8s ease-out; }
 
         .home-content h1 {
-            font-size: 3.5rem;
+            font-size: 3.2rem;
             font-weight: 700;
-            color: #2d3748;
             margin-bottom: 1rem;
-            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(45deg, var(--purple) 0%, var(--violet) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .home-content p {
-            font-size: 1.25rem;
+        .home-content h1 .wave-emoji {
+            -webkit-text-fill-color: initial;
+            display: inline-block;
+            animation: handWave 2.2s ease-in-out infinite;
+            transform-origin: 70% 70%;
+        }
+
+        .home-content .subtitle {
+            font-size: 1.15rem;
             color: #4a5568;
             margin-bottom: 2rem;
             line-height: 1.8;
         }
-        #avatar-container {
-            width: 100%;              /* half the screen width */
-            height: 500px;
-            margin-top: 2rem;
-            left:600px;
-            top:0;
-            position:absolute;
-          
-           
-            
-            
-        }
-
-        canvas {
-            width: 100% !important;
-            height: 100% !important;
-            display: block;
-        }
-
-
-
-        .floating-element {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
-            border-radius: 50%;
-            opacity: 0.1;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .floating-element:nth-child(1) {
-            top: 10%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .floating-element:nth-child(2) {
-            top: 70%;
-            right: 10%;
-            animation-delay: 2s;
-        }
-
-        .floating-element:nth-child(3) {
-            bottom: 20%;
-            left: 30%;
-            animation-delay: 4s;
-        }
 
         .nav-buttons {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 1rem;
             margin-bottom: 2rem;
         }
 
         .nav-btn {
-            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(45deg, var(--purple) 0%, var(--violet) 100%);
             color: white;
             border: none;
-            padding: 1rem 2rem;
+            padding: 1rem 1.5rem;
             border-radius: 25px;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-decoration: none;
             text-align: center;
             display: flex;
             align-items: center;
@@ -137,43 +100,388 @@
             box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
         }
 
-        .contact-info {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
+        .contact-info { display: flex; gap: 1rem; flex-wrap: wrap; }
 
         .contact-link {
-            color: #667eea;
+            color: var(--purple);
             text-decoration: none;
             padding: 0.5rem 1rem;
-            border: 2px solid #667eea;
+            border: 2px solid var(--purple);
             border-radius: 20px;
             transition: all 0.3s ease;
+            background: rgba(255,255,255,0.4);
         }
 
-        .contact-link:hover {
-            background: #667eea;
+        .contact-link:hover { background: var(--purple); color: white; }
+
+        /* ============ GHIBLI AVATAR ============ */
+        .avatar-stage {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 900px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .avatar-frame {
+            position: relative;
+            width: min(400px, 90%);
+            border-radius: 18px;
+            cursor: pointer;
+            transition: transform 0.15s ease-out;
+            animation: gentleBob 4s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        .avatar-frame img {
+            width: 100%;
+            display: block;
+            border-radius: 18px;
+            box-shadow: 0 25px 60px rgba(102, 126, 234, 0.35);
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        .avatar-frame.wiggle { animation: earTwitch 0.5s ease-in-out; }
+
+        .avatar-fallback {
+            width: 100%;
+            aspect-ratio: 2/3;
+            border-radius: 18px;
+            background: linear-gradient(160deg, #e8ecfb, #d3d9f5);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            box-shadow: 0 25px 60px rgba(102, 126, 234, 0.35);
+            color: var(--ink);
+        }
+        .avatar-fallback small { font-size: 0.9rem; margin-top: 1rem; opacity: 0.7; padding: 0 2rem; text-align:center; }
+
+        .speech-bubble {
+            position: absolute;
+            top: -1.5rem;
+            right: -1rem;
+            background: var(--paper);
+            color: var(--ink);
+            padding: 0.9rem 1.3rem;
+            border-radius: 20px 20px 20px 4px;
+            border: 3px solid var(--ink);
+            font-weight: 700;
+            font-size: 1.05rem;
+            max-width: 230px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            opacity: 0;
+            transform: translateY(15px) scale(0.8);
+            transition: all 0.35s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .speech-bubble.show { opacity: 1; transform: translateY(0) scale(1); }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 24px;
+            border: 10px solid transparent;
+            border-top-color: var(--ink);
+        }
+
+        .pet-meter {
+            position: absolute;
+            bottom: -2.4rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.85rem;
+            color: #6b7280;
+            opacity: 0;
+            transition: opacity 0.4s;
+            white-space: nowrap;
+        }
+        .pet-meter.show { opacity: 1; }
+
+        /* Soot sprites */
+        .soot {
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            pointer-events: none;
+            z-index: 1;
+            animation: sootFloat 9s ease-in-out infinite;
+            opacity: 0.85;
+        }
+        .soot svg { width: 100%; height: 100%; }
+
+        /* Drifting clouds on home bg */
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.55);
+            border-radius: 50px;
+            filter: blur(2px);
+            animation: cloudDrift linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes cloudDrift {
+            from { transform: translateX(-220px); }
+            to { transform: translateX(110vw); }
+        }
+        @keyframes gentleBob {
+            0%, 100% { transform: translateY(0) rotate(-0.4deg); }
+            50% { transform: translateY(-10px) rotate(0.4deg); }
+        }
+        @keyframes earTwitch {
+            0%, 100% { transform: rotate(0); }
+            25% { transform: rotate(-2.5deg) scale(1.02); }
+            60% { transform: rotate(2deg) scale(1.01); }
+        }
+        @keyframes handWave {
+            0%, 55%, 100% { transform: rotate(0); }
+            60% { transform: rotate(18deg); }
+            70% { transform: rotate(-10deg); }
+            80% { transform: rotate(16deg); }
+            90% { transform: rotate(-6deg); }
+        }
+        @keyframes sootFloat {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            30% { transform: translateY(-22px) translateX(8px); }
+            65% { transform: translateY(-6px) translateX(-10px); }
+        }
+
+        /* ============ RESUME PAGE ============ */
+        .resume-page {
+            min-height: 100vh;
+            background: linear-gradient(160deg, #f5f7fa 0%, #dcd6f0 100%);
+            padding: 6rem 2rem 4rem;
+            color: var(--ink);
+        }
+
+        .resume-container { max-width: 950px; margin: 0 auto; }
+
+        .resume-hero {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .resume-hero h2 {
+            font-size: 2.8rem;
+            margin-bottom: 0.4rem;
+            background: linear-gradient(45deg, var(--purple) 0%, var(--violet) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .resume-hero .tagline { color: #4a5568; font-size: 1.1rem; max-width: 640px; margin: 0 auto 1.5rem; }
+
+        .stat-chips {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-chip {
+            background: var(--paper);
+            border: 2px solid var(--purple);
+            border-radius: 18px;
+            padding: 0.9rem 1.5rem;
+            min-width: 130px;
+            box-shadow: 0 6px 15px rgba(102, 126, 234, 0.15);
+            transition: transform 0.3s ease;
+        }
+        .stat-chip:hover { transform: translateY(-4px) rotate(-1deg); }
+        .stat-chip .num { font-size: 1.9rem; font-weight: 800; color: var(--deep-purple); display: block; }
+        .stat-chip .lbl { font-size: 0.85rem; color: #6b7280; }
+
+        .resume-actions { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+        .resume-action-btn {
+            background: linear-gradient(45deg, var(--purple), var(--violet));
             color: white;
+            border: none;
+            border-radius: 22px;
+            padding: 0.7rem 1.6rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .resume-action-btn.secondary { background: transparent; color: var(--purple); border: 2px solid var(--purple); }
+        .resume-action-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(102,126,234,0.35); }
+
+        .resume-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin: 2.5rem 0 2rem;
         }
 
-        /* Projects Page Styles */
+        .resume-tab {
+            background: rgba(255,255,255,0.6);
+            border: 2px solid transparent;
+            color: var(--ink);
+            padding: 0.7rem 1.4rem;
+            border-radius: 22px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.25s ease;
+        }
+        .resume-tab.active, .resume-tab:hover {
+            background: linear-gradient(45deg, var(--purple), var(--violet));
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .resume-section { display: none; animation: fadeInUp 0.5s ease-out; }
+        .resume-section.active { display: block; }
+
+        /* Timeline */
+        .timeline { position: relative; padding-left: 2.2rem; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 9px;
+            top: 6px;
+            bottom: 6px;
+            width: 3px;
+            background: linear-gradient(var(--purple), var(--violet));
+            border-radius: 3px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.4rem;
+            background: var(--paper);
+            border-radius: 16px;
+            padding: 1.3rem 1.5rem;
+            box-shadow: 0 6px 18px rgba(102, 126, 234, 0.12);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(25px);
+        }
+        .timeline-item.revealed { opacity: 1; transform: translateY(0); }
+        .timeline-item:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(102, 126, 234, 0.2); }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.05rem;
+            top: 1.6rem;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--violet);
+            border: 3px solid var(--paper);
+            box-shadow: 0 0 0 3px var(--purple);
+        }
+
+        .timeline-item h4 { color: var(--deep-purple); font-size: 1.2rem; }
+        .timeline-item .where { color: var(--purple); font-weight: 600; font-size: 0.95rem; }
+        .timeline-item .when {
+            display: inline-block;
+            background: rgba(102, 126, 234, 0.15);
+            color: var(--deep-purple);
+            border-radius: 12px;
+            padding: 0.1rem 0.7rem;
+            font-size: 0.82rem;
+            margin: 0.3rem 0 0.4rem;
+            font-weight: 600;
+        }
+
+        .timeline-item .details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.45s ease;
+        }
+        .timeline-item.open .details { max-height: 350px; }
+        .timeline-item .details ul { margin: 0.6rem 0 0.2rem 1.2rem; color: #4a5568; }
+        .timeline-item .details li { margin-bottom: 0.4rem; }
+
+        .timeline-item .expand-hint {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            margin-top: 0.4rem;
+        }
+        .timeline-item.open .expand-hint .arrow { display: inline-block; transform: rotate(180deg); }
+        .expand-hint .arrow { display: inline-block; transition: transform 0.3s; }
+
+        /* Skills */
+        .skill-group { margin-bottom: 1.8rem; }
+        .skill-group h4 {
+            color: var(--deep-purple);
+            margin-bottom: 0.8rem;
+            font-size: 1.15rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .skill-chips { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+
+        .skill-chip {
+            background: var(--paper);
+            border: 2px solid var(--purple);
+            color: var(--ink);
+            padding: 0.45rem 1rem;
+            border-radius: 18px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.25s ease;
+            cursor: default;
+            opacity: 0;
+            transform: scale(0.7);
+        }
+        .skill-chip.revealed { opacity: 1; transform: scale(1); }
+        .skill-chip:hover {
+            background: linear-gradient(45deg, var(--purple), var(--violet));
+            color: white;
+            transform: translateY(-3px) rotate(-2deg) scale(1.05);
+            box-shadow: 0 6px 14px rgba(102, 126, 234, 0.45);
+        }
+
+        /* Awards */
+        .awards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .award-card {
+            background: var(--paper);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 6px 18px rgba(102, 126, 234, 0.12);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(25px);
+        }
+        .award-card.revealed { opacity: 1; transform: translateY(0); }
+        .award-card:hover { transform: translateY(-5px) rotate(1deg); }
+        .award-card .medal { font-size: 2.4rem; display: block; margin-bottom: 0.6rem; }
+        .award-card h4 { color: var(--deep-purple); font-size: 1.05rem; }
+
+        /* ============ PROJECTS PAGE ============ */
         .projects-page {
             min-height: 100vh;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            padding: 2rem;
+            padding: 6rem 2rem 3rem;
             color: white;
         }
 
-        .projects-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .projects-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
+        .projects-container { max-width: 1200px; margin: 0 auto; }
+        .projects-header { text-align: center; margin-bottom: 3rem; }
 
         .projects-header h2 {
             font-size: 3rem;
@@ -203,15 +511,14 @@
             font-size: 1rem;
         }
 
-        .category-btn.active,
-        .category-btn:hover {
+        .category-btn.active, .category-btn:hover {
             background: rgba(255, 255, 255, 0.2);
             border-color: #00d4ff;
         }
 
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
             gap: 2rem;
         }
 
@@ -222,7 +529,7 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             transition: all 0.3s ease;
-            cursor: pointer;
+            position: relative;
         }
 
         .project-card:hover {
@@ -230,18 +537,22 @@
             box-shadow: 0 15px 35px rgba(0, 212, 255, 0.2);
         }
 
-        .project-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #00d4ff;
+        .project-card h3 { font-size: 1.4rem; margin-bottom: 0.8rem; color: #00d4ff; padding-right: 5.5rem; }
+        .project-card p { color: #dbe9ff; }
+
+        .featured-badge {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.2rem;
+            background: linear-gradient(45deg, #ffb347, #ffcc33);
+            color: #1e3c72;
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.7rem;
+            border-radius: 12px;
         }
 
-        .project-card .tools {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-        }
+        .project-card .tools { display: flex; gap: 0.5rem; margin: 1rem 0 0; flex-wrap: wrap; }
 
         .tool-tag {
             background: rgba(0, 212, 255, 0.2);
@@ -251,42 +562,15 @@
             color: #00d4ff;
         }
 
-        .project-links {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .project-link {
-            color: #00ff94;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border: 1px solid #00ff94;
-            border-radius: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .project-link:hover {
-            background: #00ff94;
-            color: #1e3c72;
-        }
-
-        /* Blog Page Styles */
+        /* ============ BLOG PAGE ============ */
         .blog-page {
             min-height: 100vh;
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
-            padding: 2rem;
+            padding: 6rem 2rem 3rem;
         }
 
-        .blog-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .blog-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
+        .blog-container { max-width: 800px; margin: 0 auto; }
+        .blog-header { text-align: center; margin-bottom: 3rem; }
 
         .blog-header h2 {
             font-family: 'Georgia', serif;
@@ -296,13 +580,7 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
-        .blog-filters {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
+        .blog-filters { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
 
         .filter-btn {
             background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
@@ -315,17 +593,12 @@
             font-weight: 600;
         }
 
-        .filter-btn.active,
-        .filter-btn:hover {
+        .filter-btn.active, .filter-btn:hover {
             transform: scale(1.05);
             box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
         }
 
-        .blog-posts {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
+        .blog-posts { display: flex; flex-direction: column; gap: 2rem; }
 
         .blog-post {
             background: rgba(255, 255, 255, 0.9);
@@ -336,30 +609,10 @@
             cursor: pointer;
         }
 
-        .blog-post:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-        }
-
-        .blog-post h3 {
-            font-family: 'Georgia', serif;
-            font-size: 1.5rem;
-            color: #6b46c1;
-            margin-bottom: 0.5rem;
-        }
-
-        .blog-post .date {
-            color: #9ca3af;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-
-        .blog-post .tags {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
+        .blog-post:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
+        .blog-post h3 { font-family: 'Georgia', serif; font-size: 1.5rem; color: #6b46c1; margin-bottom: 0.5rem; }
+        .blog-post .date { color: #9ca3af; font-size: 0.9rem; margin-bottom: 1rem; }
+        .blog-post .tags { display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
 
         .tag {
             background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
@@ -369,19 +622,15 @@
             font-size: 0.8rem;
         }
 
-        /* Photos Page Styles */
+        /* ============ PHOTOS PAGE ============ */
         .photos-page {
             min-height: 100vh;
             background: linear-gradient(135deg, #000000 0%, #2c2c2c 100%);
-            padding: 2rem;
+            padding: 6rem 2rem 3rem;
             color: white;
         }
 
-        .photos-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            text-align: center;
-        }
+        .photos-container { max-width: 1200px; margin: 0 auto; text-align: center; }
 
         .photos-header h2 {
             font-size: 3rem;
@@ -400,19 +649,13 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .coming-soon h3 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: #ff6b6b;
-        }
+        .coming-soon h3 { font-size: 2rem; margin-bottom: 1rem; color: #ff6b6b; }
 
-        /* Secret Gate Styles */
+        /* ============ SECRET GATE ============ */
         .secret-gate {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             align-items: center;
@@ -432,11 +675,7 @@
             width: 90%;
         }
 
-        .gate-content h3 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: #ff6b6b;
-        }
+        .gate-content h3 { font-size: 2rem; margin-bottom: 1rem; color: #ff6b6b; }
 
         .gate-input {
             width: 100%;
@@ -460,16 +699,12 @@
             transition: all 0.3s ease;
         }
 
-        .gate-btn:hover {
-            transform: scale(1.05);
-        }
+        .gate-btn:hover { transform: scale(1.05); }
 
-        /* Navigation */
+        /* ============ NAVIGATION ============ */
         .nav-bar {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             padding: 1rem 2rem;
@@ -477,19 +712,17 @@
             justify-content: space-between;
             align-items: center;
             z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
         }
 
         .nav-bar .logo {
             font-weight: 700;
             font-size: 1.5rem;
-            color: #667eea;
+            color: var(--purple);
+            cursor: pointer;
         }
 
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
+        .nav-links { display: flex; gap: 2rem; }
 
         .nav-links a {
             color: #4a5568;
@@ -498,29 +731,15 @@
             transition: color 0.3s ease;
         }
 
-        .nav-links a:hover {
-            color: #667eea;
-        }
+        .nav-links a:hover { color: var(--purple); }
 
-        /* Page Management */
-        .page {
-            display: none;
-        }
+        /* Page management */
+        .page { display: none; }
+        .page.active { display: block; }
 
-        .page.active {
-            display: block;
-        }
-
-        /* Animations */
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes float {
@@ -528,205 +747,341 @@
             50% { transform: translateY(-20px); }
         }
 
-        /* Responsive Design */
+        /* ============ RESPONSIVE ============ */
         @media (max-width: 768px) {
-            .home-container {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-                text-align: center;
-            }
-
-            .home-content h1 {
-                font-size: 2.5rem;
-            }
-
-            .projects-header h2,
-            .blog-header h2,
-            .photos-header h2 {
-                font-size: 2rem;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .projects-grid {
-                grid-template-columns: 1fr;
-            }
+            .home-container { grid-template-columns: 1fr; gap: 2.5rem; text-align: center; }
+            .home-content h1 { font-size: 2.4rem; }
+            .projects-header h2, .blog-header h2, .photos-header h2, .resume-hero h2 { font-size: 2rem; }
+            .nav-links { display: none; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .speech-bubble { right: 0; }
+            .timeline { padding-left: 1.8rem; }
         }
 
-        .hidden {
-            display: none !important;
+        .hidden { display: none !important; }
+
+        @media print {
+            .nav-bar, .avatar-stage, .resume-tabs, .resume-actions, .nav-buttons { display: none !important; }
+            .resume-section { display: block !important; }
+            body { padding-top: 0 !important; }
         }
     </style>
 </head>
 <body>
     <!-- Navigation Bar -->
     <nav class="nav-bar">
-        <div class="logo">Ammar's den</div>
+        <div class="logo" onclick="showPage('home')">Ammar's den 🐾</div>
         <div class="nav-links">
             <a href="#" onclick="showPage('home')">Home</a>
+            <a href="#" onclick="showPage('resume')">Resume</a>
             <a href="#" onclick="showPage('projects')">Projects</a>
             <a href="#" onclick="showPage('blog')">Blog</a>
             <a href="#" onclick="showPage('photos')">Photos</a>
         </div>
     </nav>
 
-    <!-- Home Page -->
+    <!-- ============ HOME PAGE ============ -->
     <div id="home" class="page active">
-        <div class="home-page">
-            <div class="floating-element"></div>
-            <div class="floating-element"></div>
-            <div class="floating-element"></div>
-            
+        <div class="home-page" id="home-bg">
             <div class="home-container">
                 <div class="home-content">
-                    <h1>Hi, I'm Ammar</h1>
-                    <p>I'm an engineering student who loves to build things, explore ideas, and create meaningful experiences. Welcome to my little corner of the internet where professionalism meets creativity.</p>
-                    <!-- 🧑‍🎤 Avatar container -->
-                    <div id="avatar-container"></div>
+                    <h1>Hi, I'm Ammar <span class="wave-emoji">👋</span></h1>
+                    <p class="subtitle">Electrical &amp; Computer Systems Engineering student at Monash, building things at the intersection of embedded systems, FPGAs, and health-tech. Currently prototyping a portable hearing-loss screener. Welcome to my little corner of the internet.</p>
+
                     <div class="nav-buttons">
-                        <button class="nav-btn" onclick="showPage('projects')">
-                            <span>🚀</span> View My Projects
-                        </button>
-                        <button class="nav-btn" onclick="showPage('blog')">
-                            <span>✨</span> Read My Thoughts
-                        </button>
-                        <button class="nav-btn" onclick="showPage('photos')">
-                            <span>📸</span> See My Photos
-                        </button>
+                        <button class="nav-btn" onclick="showPage('resume')"><span>📜</span> Resume</button>
+                        <button class="nav-btn" onclick="showPage('projects')"><span>🚀</span> My Projects</button>
+                        <button class="nav-btn" onclick="showPage('blog')"><span>✨</span> My Thoughts</button>
+                        <button class="nav-btn" onclick="showPage('photos')"><span>📸</span> Photos</button>
                     </div>
-                    
+
                     <div class="contact-info">
-                        <a href="mailto:ammarbinirfan2003@gmail.com" class="contact-link">Email Me</a>
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=ammarbinirfan2003@gmail.com" target="_blank" class="contact-link">Email</a>
                         <a href="https://linkedin.com/in/ammar-irfan-2bc/" target="_blank" class="contact-link">LinkedIn</a>
                         <a href="https://github.com/am-cell/" target="_blank" class="contact-link">GitHub</a>
-                        <a href="https://instagram.com/aamar_9276/" target="_blank" class="contact-link">Instagram</a>
+                        <a href="https://www.instagram.com/minhoe_3/" target="_blank" class="contact-link">Instagram</a>
+                    </div>
+                </div>
+
+                <!-- Ghibli avatar -->
+                <div class="avatar-stage" id="avatar-stage">
+                    <div class="avatar-frame" id="avatar-frame" title="Pet the cat. You know you want to.">
+                        <div class="speech-bubble" id="speech-bubble"></div>
+                        <img src="ghibli-me.png" alt="Ghibli-style Ammar" id="avatar-img"
+                             onerror="this.style.display='none'; document.getElementById('avatar-fallback').style.display='flex';">
+                        <div class="avatar-fallback" id="avatar-fallback">
+                            🐱
+                            <small>Save your Ghibli portrait as <b>ghibli-me.png</b> next to index.html and I'll appear!</small>
+                        </div>
+                        <div class="pet-meter" id="pet-meter"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script type="module" src="./script.js"></script>
-    <!-- Projects Page -->
+
+    <!-- ============ RESUME PAGE ============ -->
+    <div id="resume" class="page">
+        <div class="resume-page">
+            <div class="resume-container">
+                <div class="resume-hero">
+                    <h2>Ammar Irfan</h2>
+                    <p class="tagline">ECSE student @ Monash University · embedded systems · FPGA design · biomedical signal processing · currently prototyping a portable hearing-loss screener with the Monash Institute of Medical Engineering &amp; Ear Science Institute.</p>
+
+                    <div class="stat-chips">
+                        <div class="stat-chip"><span class="num" data-count="7">0</span><span class="lbl">Projects</span></div>
+                        <div class="stat-chip"><span class="num" data-count="3">0</span><span class="lbl">Roles</span></div>
+                        <div class="stat-chip"><span class="num" data-count="4">0</span><span class="lbl">Awards</span></div>
+                        <div class="stat-chip"><span class="num" data-count="6">0</span><span class="lbl">Languages / HDL</span></div>
+                    </div>
+
+                    <div class="resume-actions">
+                        <a class="resume-action-btn" href="https://mail.google.com/mail/?view=cm&fs=1&to=ammarbinirfan2003@gmail.com" target="_blank">📧 Get in touch</a>
+                        <a class="resume-action-btn secondary" href="resume.pdf" target="_blank">📄 Download PDF</a>
+                    </div>
+                </div>
+
+                <div class="resume-tabs">
+                    <button class="resume-tab active" onclick="showResumeSection('experience', event)">💼 Experience</button>
+                    <button class="resume-tab" onclick="showResumeSection('skills', event)">🛠️ Skills</button>
+                    <button class="resume-tab" onclick="showResumeSection('education', event)">🎓 Education</button>
+                    <button class="resume-tab" onclick="showResumeSection('awards', event)">🏆 Awards</button>
+                </div>
+
+                <!-- Experience -->
+                <div id="resume-experience" class="resume-section active">
+                    <div class="timeline">
+                        <div class="timeline-item open" onclick="toggleTimelineItem(this)">
+                            <h4>Research Support Officer</h4>
+                            <div class="where">Monash Institute of Medical Engineering &amp; Ear Science Institute</div>
+                            <span class="when">June 2026 – Present</span>
+                            <div class="details">
+                                <ul>
+                                    <li>Contributing to the research and prototyping of a portable hearing-loss screener, working across both hardware development and study design.</li>
+                                    <li>Working across circuit/system design and clinical research processes to translate engineering concepts into a usable diagnostic tool.</li>
+                                    <li>Collaborating with clinical and research staff to align device requirements with real-world screening use cases.</li>
+                                </ul>
+                            </div>
+                            <div class="expand-hint">Click to expand / collapse <span class="arrow">▾</span></div>
+                        </div>
+
+                        <div class="timeline-item open" onclick="toggleTimelineItem(this)">
+                            <h4>Technical Intern</h4>
+                            <div class="where">Maxme</div>
+                            <span class="when">Nov 2025 – Feb 2026</span>
+                            <div class="details">
+                                <ul>
+                                    <li>Developed AI avatar video content using Heygen AI.</li>
+                                    <li>Researched APIs and automation tools to improve internal processes and workflow efficiency.</li>
+                                </ul>
+                            </div>
+                            <div class="expand-hint">Click to expand / collapse <span class="arrow">▾</span></div>
+                        </div>
+
+                        <div class="timeline-item open" onclick="toggleTimelineItem(this)">
+                            <h4>Technical Intern</h4>
+                            <div class="where">Aftab Engineering</div>
+                            <span class="when">Nov 2024 – Jan 2025</span>
+                            <div class="details">
+                                <ul>
+                                    <li>Assisted with process automation using Omron PLCs to improve operational efficiency.</li>
+                                </ul>
+                            </div>
+                            <div class="expand-hint">Click to expand / collapse <span class="arrow">▾</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skills -->
+                <div id="resume-skills" class="resume-section">
+                    <div class="skill-group">
+                        <h4>💻 Programming &amp; HDL</h4>
+                        <div class="skill-chips">
+                            <span class="skill-chip">Python</span>
+                            <span class="skill-chip">C</span>
+                            <span class="skill-chip">C++</span>
+                            <span class="skill-chip">Verilog</span>
+                            <span class="skill-chip">MATLAB</span>
+                            <span class="skill-chip">Assembly (MARS)</span>
+                        </div>
+                    </div>
+                    <div class="skill-group">
+                        <h4>🔌 Embedded Hardware</h4>
+                        <div class="skill-chips">
+                            <span class="skill-chip">STM32</span>
+                            <span class="skill-chip">Arduino</span>
+                            <span class="skill-chip">FPGA (Intel Quartus)</span>
+                            <span class="skill-chip">SPI Communication</span>
+                        </div>
+                    </div>
+                    <div class="skill-group">
+                        <h4>📐 Design &amp; Simulation</h4>
+                        <div class="skill-chips">
+                            <span class="skill-chip">LTSpice</span>
+                            <span class="skill-chip">SolidWorks</span>
+                        </div>
+                    </div>
+                    <div class="skill-group">
+                        <h4>🧠 Core Competencies</h4>
+                        <div class="skill-chips">
+                            <span class="skill-chip">Embedded Systems</span>
+                            <span class="skill-chip">Digital Logic</span>
+                            <span class="skill-chip">CPU Architecture</span>
+                            <span class="skill-chip">Signal Processing</span>
+                            <span class="skill-chip">Analogue Circuits</span>
+                            <span class="skill-chip">Parallel Processing</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Education -->
+                <div id="resume-education" class="resume-section">
+                    <div class="timeline">
+                        <div class="timeline-item open" onclick="toggleTimelineItem(this)">
+                            <h4>Bachelor of Electrical &amp; Computer Systems Engineering</h4>
+                            <div class="where">Monash University, Melbourne, Australia</div>
+                            <span class="when">Feb 2024 – Expected June 2027</span>
+                            <div class="details">
+                                <ul>
+                                    <li>Focus areas: embedded systems, digital design, signal processing, and biomedical engineering applications.</li>
+                                    <li>Selected for Monash UROP (Undergraduate Research Opportunities Program).</li>
+                                </ul>
+                            </div>
+                            <div class="expand-hint">Click to expand / collapse <span class="arrow">▾</span></div>
+                        </div>
+
+                        <div class="timeline-item open" onclick="toggleTimelineItem(this)">
+                            <h4>Bachelor of Electrical &amp; Computer Systems Engineering (commenced)</h4>
+                            <div class="where">Monash University, Malaysia</div>
+                            <span class="when">Oct 2023 – Feb 2024</span>
+                            <div class="details">
+                                <ul>
+                                    <li>First semesters of the ECSE degree before transferring to the Melbourne campus.</li>
+                                </ul>
+                            </div>
+                            <div class="expand-hint">Click to expand / collapse <span class="arrow">▾</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Awards -->
+                <div id="resume-awards" class="resume-section">
+                    <div class="awards-grid">
+                        <div class="award-card">
+                            <span class="medal">🩺</span>
+                            <h4>Future MedTech Leaders Program</h4>
+                        </div>
+                        <div class="award-card">
+                            <span class="medal">🎖️</span>
+                            <h4>D K and G Anderson Award</h4>
+                        </div>
+                        <div class="award-card">
+                            <span class="medal">💡</span>
+                            <h4>Monash Energy Ideathon — Innovation Award</h4>
+                        </div>
+                        <div class="award-card">
+                            <span class="medal">⭐</span>
+                            <h4>Monash High Achiever Award (HAA)</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ PROJECTS PAGE ============ -->
     <div id="projects" class="page">
         <div class="projects-page">
             <div class="projects-container">
                 <div class="projects-header">
                     <h2>My Projects</h2>
-                    <p>A collection of things I've built, learned from, and am proud of.</p>
+                    <p>From FPGA pipelines to hearing-health research — things I've built, broken, and rebuilt.</p>
                 </div>
 
                 <div class="project-categories">
                     <button class="category-btn active" onclick="filterProjects('all')">All</button>
+                    <button class="category-btn" onclick="filterProjects('research')">Research</button>
                     <button class="category-btn" onclick="filterProjects('university')">University</button>
-                    <button class="category-btn" onclick="filterProjects('personal')">Personal</button>
-                    <button class="category-btn" onclick="filterProjects('passion')">Passion</button>
+                    <button class="category-btn" onclick="filterProjects('maker')">Maker</button>
                 </div>
 
                 <div class="projects-grid">
-                    <!-- Smart Home with Alexa -->
-                    <div class="project-card" data-category="personal">
-                        <h3>IoT Smart Home with Alexa</h3>
-                        <p>Built a voice-controlled smart home system using Arduino, ESP8266, and Alexa integration for automation of lights and appliances.</p>
+                    <div class="project-card" data-category="research">
+                        <span class="featured-badge">★ FINAL YEAR</span>
+                        <h3>Violet Light MIMO VLC Systems</h3>
+                        <p>Researching the feasibility of violet light replacing blue light in MIMO Visible Light Communication systems — blue light has significantly greater effects on sleep, arrhythmia, and mental health. Compared violet vs. blue across communication performance and biological safety criteria.</p>
                         <div class="tools">
-                            <span class="tool-tag">Arduino</span>
-                            <span class="tool-tag">ESP8266</span>
-                            <span class="tool-tag">IoT</span>
-                            <span class="tool-tag">Alexa</span>
+                            <span class="tool-tag">VLC</span>
+                            <span class="tool-tag">MIMO</span>
+                            <span class="tool-tag">Photonics</span>
+                            <span class="tool-tag">Research</span>
                         </div>
                     </div>
 
-                    <!-- WLED Lighting -->
-                    <div class="project-card" data-category="personal">
-                        <h3>ESP8266 WLED Lighting</h3>
-                        <p>Set up RGB lighting effects using WLED firmware and ESP8266, enabling WiFi control of LEDs with beautiful animations.</p>
-                        <div class="tools">
-                            <span class="tool-tag">ESP8266</span>
-                            <span class="tool-tag">WLED</span>
-                            <span class="tool-tag">RGB</span>
-                            <span class="tool-tag">IoT</span>
-                        </div>
-                    </div>
-
-                    <!-- WiFi Bot -->
-                    <div class="project-card" data-category="passion">
-                        <h3>Hand-Controlled WiFi Bot</h3>
-                        <p>A gesture-controlled robot built with Arduino, MPU6050, and Bluetooth for wireless movement via hand motions.</p>
-                        <div class="tools">
-                            <span class="tool-tag">Arduino</span>
-                            <span class="tool-tag">MPU6050</span>
-                            <span class="tool-tag">Bluetooth</span>
-                            <span class="tool-tag">Robotics</span>
-                        </div>
-                    </div>
-
-                    <!-- GPT Medical Translator -->
-                    <div class="project-card" data-category="passion">
-                        <h3>GPT Medical Translator</h3>
-                        <p>Developed a natural language tool to translate medical terminology and patient inputs using GPT API, aiding better understanding for clinicians and patients.</p>
-                        <div class="tools">
-                            <span class="tool-tag">Python</span>
-                            <span class="tool-tag">GPT</span>
-                            <span class="tool-tag">NLP</span>
-                        </div>
-                    </div>
-
-                    <!-- TremSleeve Project -->
-                    <div class="project-card" data-category="university">
-                        <h3>TremSleeve: Medical Signal Processor</h3>
-                        <p>Research project for wearable tech focused on analyzing tremors in patients using real-time signal processing techniques.</p>
+                    <div class="project-card" data-category="research">
+                        <span class="featured-badge">★ DYSON ENTRY</span>
+                        <h3>Tremor Analysis Wearable</h3>
+                        <p>Biomedical signal processing research for wearable tech, analyzing tremors in patients using real-time signal processing. Submitted to the James Dyson Award and selected for Monash UROP research.</p>
                         <div class="tools">
                             <span class="tool-tag">Signal Processing</span>
                             <span class="tool-tag">Wearables</span>
                             <span class="tool-tag">STM32</span>
+                            <span class="tool-tag">UROP</span>
                         </div>
                     </div>
 
-                    <!-- Traffic Light System -->
                     <div class="project-card" data-category="university">
-                        <h3>Smart Traffic Light System</h3>
-                        <p>Simulated a traffic intersection using Arduino and sensors to control light changes and prioritize vehicle flow efficiently.</p>
+                        <h3>FPGA Camera + Haptic Feedback System</h3>
+                        <p>FPGA system with camera interfacing, user inputs, and ADXL345-based haptic feedback. Built parallel processing on the FPGA to handle multiple input streams simultaneously, with SPI interfacing for the camera and VGA output.</p>
                         <div class="tools">
-                            <span class="tool-tag">Arduino</span>
-                            <span class="tool-tag">Sensors</span>
-                            <span class="tool-tag">ECE1013</span>
+                            <span class="tool-tag">FPGA</span>
+                            <span class="tool-tag">SPI</span>
+                            <span class="tool-tag">VGA</span>
+                            <span class="tool-tag">ADXL345</span>
+                            <span class="tool-tag">Parallel Processing</span>
                         </div>
                     </div>
 
-                    <!-- Microcontroller Design -->
                     <div class="project-card" data-category="university">
-                        <h3>Custom Microcontroller Design</h3>
-                        <p>Built a functional microcontroller using Verilog in Quartus, implementing basic logic, memory access, and control structures.</p>
+                        <h3>16-bit RISC CPU in Verilog</h3>
+                        <p>Designed a 16-bit RISC CPU including ALU, control unit, and memory interfaces using Verilog on Intel Quartus.</p>
                         <div class="tools">
                             <span class="tool-tag">Verilog</span>
                             <span class="tool-tag">Quartus</span>
+                            <span class="tool-tag">CPU Architecture</span>
                             <span class="tool-tag">Digital Logic</span>
-                            <span class="tool-tag">ECE2072</span>
                         </div>
                     </div>
 
-                    <!-- STM32 Audio System -->
                     <div class="project-card" data-category="university">
-                        <h3>Audio Processing with STM32</h3>
-                        <p>Captured and filtered real-time audio using STM32 microcontroller, applied moving average filters, and transmitted data via UART.</p>
+                        <h3>Real-Time Audio Processing on STM32</h3>
+                        <p>Implemented real-time audio sampling and filtering at 44.1 kHz using UART + DMA on STM32 microcontrollers, streaming processed audio to a PC.</p>
                         <div class="tools">
                             <span class="tool-tag">STM32</span>
                             <span class="tool-tag">C</span>
-                            <span class="tool-tag">UART</span>
-                            <span class="tool-tag">ECE2071</span>
+                            <span class="tool-tag">UART + DMA</span>
+                            <span class="tool-tag">DSP</span>
                         </div>
                     </div>
 
-                    <!-- Audio Amplifier Circuit -->
                     <div class="project-card" data-category="university">
-                        <h3>Audio Amplifier Circuit</h3>
-                        <p>Designed and simulated an op-amp based amplifier for boosting analog audio signals, exploring gain and frequency response.</p>
+                        <h3>Analog True RMS Converter</h3>
+                        <p>Designed and built a discrete analog true RMS-to-DC converter using op-amps and passive components. Analysed RMS accuracy for non-sinusoidal waveforms through LTSpice simulation and experimental validation.</p>
                         <div class="tools">
                             <span class="tool-tag">Analog</span>
-                            <span class="tool-tag">LTSpice</span>
                             <span class="tool-tag">Op-Amps</span>
-                            <span class="tool-tag">ECE2131</span>
+                            <span class="tool-tag">LTSpice</span>
+                        </div>
+                    </div>
+
+                    <div class="project-card" data-category="maker">
+                        <h3>Gesture-Controlled Wi-Fi Robot + IoT Home</h3>
+                        <p>Gesture-controlled Wi-Fi robot using ESP8266 and MPU6050 sensors, plus an IoT home automation system for lighting and sensor control with custom user interfaces.</p>
+                        <div class="tools">
+                            <span class="tool-tag">ESP8266</span>
+                            <span class="tool-tag">MPU6050</span>
+                            <span class="tool-tag">IoT</span>
+                            <span class="tool-tag">Robotics</span>
                         </div>
                     </div>
                 </div>
@@ -734,8 +1089,7 @@
         </div>
     </div>
 
-
-    <!-- Blog Page -->
+    <!-- ============ BLOG PAGE ============ -->
     <div id="blog" class="page">
         <div class="blog-page">
             <div class="blog-container">
@@ -743,7 +1097,7 @@
                     <h2>My Mind Palace</h2>
                     <p>Where thoughts roam free and ideas come to play ✨</p>
                 </div>
-                
+
                 <div class="blog-filters">
                     <button class="filter-btn active" onclick="filterPosts('all')">All Vibes</button>
                     <button class="filter-btn" onclick="filterPosts('tech')">Tech Talk</button>
@@ -751,7 +1105,7 @@
                     <button class="filter-btn" onclick="filterPosts('chaos')">Chaotic Thoughts</button>
                     <button class="filter-btn" onclick="filterPosts('queer')">Queer Reflections</button>
                 </div>
-                
+
                 <div class="blog-posts">
                     <div class="blog-post" data-category="life">
                         <h3>The Art of Productive Procrastination</h3>
@@ -763,7 +1117,7 @@
                             <span class="tag">life-hacks</span>
                         </div>
                     </div>
-                    
+
                     <div class="blog-post" data-category="tech">
                         <h3>Why I Fell in Love with TypeScript</h3>
                         <div class="date">March 8, 2024</div>
@@ -774,7 +1128,7 @@
                             <span class="tag">coding</span>
                         </div>
                     </div>
-                    
+
                     <div class="blog-post" data-category="chaos">
                         <h3>Shower Thoughts: Volume 47</h3>
                         <div class="date">March 2, 2024</div>
@@ -785,7 +1139,7 @@
                             <span class="tag">late-night</span>
                         </div>
                     </div>
-                    
+
                     <div class="blog-post" data-category="queer">
                         <h3>Finding My Voice in Tech Spaces</h3>
                         <div class="date">February 28, 2024</div>
@@ -796,7 +1150,7 @@
                             <span class="tag">representation</span>
                         </div>
                     </div>
-                    
+
                     <div class="blog-post" data-category="life">
                         <h3>The Perfect Playlist for Everything</h3>
                         <div class="date">February 20, 2024</div>
@@ -812,7 +1166,7 @@
         </div>
     </div>
 
-    <!-- Photos Page -->
+    <!-- ============ PHOTOS PAGE ============ -->
     <div id="photos" class="page">
         <div class="photos-page">
             <div class="photos-container">
@@ -820,7 +1174,7 @@
                     <h2>Visual Stories</h2>
                     <p>Capturing moments, expressions, and the art of being</p>
                 </div>
-                
+
                 <div class="coming-soon">
                     <h3>Coming Soon</h3>
                     <p>This space is being prepared for a curated collection of modeling photos and visual narratives. Stay tuned for something beautiful.</p>
@@ -830,7 +1184,7 @@
         </div>
     </div>
 
-    <!-- Secret Gate -->
+    <!-- ============ SECRET GATE ============ -->
     <div id="secret-gate" class="secret-gate hidden">
         <div class="gate-content">
             <h3>🔐 Secret Area</h3>
@@ -839,6 +1193,7 @@
             <div>
                 <button class="gate-btn" onclick="checkSecretPhrase()">Enter</button>
                 <button class="gate-btn" onclick="requestAccess()">Request Access</button>
+                <button class="gate-btn" onclick="hideSecretGate()">← Go Back</button>
             </div>
             <div id="gate-error" style="color: #ff6b6b; margin-top: 1rem; display: none;">
                 Hmm, that doesn't seem right. Try again or request access!
@@ -847,34 +1202,22 @@
     </div>
 
     <script>
-        // Page Management
-        const pages = ['home', 'projects', 'blog', 'photos'];
+        /* ==================== PAGE MANAGEMENT ==================== */
+        const pages = ['home', 'resume', 'projects', 'blog', 'photos'];
         const protectedPages = ['blog', 'photos'];
-        const secretPhrase = 'rainbow unicorn'; // Change this to your preferred secret phrase
-        
+        const secretPhrase = 'rainbow unicorn';
         let hasAccess = false;
 
         function showPage(pageId) {
-            // Check if page is protected
             if (protectedPages.includes(pageId) && !hasAccess) {
                 showSecretGate(pageId);
                 return;
             }
-            
-            // Hide all pages
-            pages.forEach(page => {
-                document.getElementById(page).classList.remove('active');
-            });
-            
-            // Show selected page
+            pages.forEach(p => document.getElementById(p).classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
-            
-            // Update body padding for nav
-            if (pageId === 'home') {
-                document.body.style.paddingTop = '0';
-            } else {
-                document.body.style.paddingTop = '80px';
-            }
+            document.body.style.paddingTop = pageId === 'home' ? '0' : '0';
+            window.scrollTo({ top: 0 });
+            if (pageId === 'resume') initResumeAnimations();
         }
 
         function showSecretGate(targetPage) {
@@ -894,7 +1237,6 @@
             const input = document.getElementById('secret-phrase').value.toLowerCase().trim();
             const gate = document.getElementById('secret-gate');
             const targetPage = gate.getAttribute('data-target');
-            
             if (input === secretPhrase) {
                 hasAccess = true;
                 hideSecretGate();
@@ -907,249 +1249,280 @@
         function requestAccess() {
             const email = 'ammarbinirfan2003@gmail.com';
             const subject = encodeURIComponent("Access Request for Secret Pages");
-            const body = encodeURIComponent(`Hi! I'd like to request access to your blog and photos pages.
-
-        My email: 
-        Why I'm interested: 
-
-        Thanks!`);
-
-            const gmailURL = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`;
-            window.open(gmailURL, '_blank');
+            const body = encodeURIComponent("Hi! I'd like to request access to your blog and photos pages.\n\nMy email: \nWhy I'm interested: \n\nThanks!");
+            window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`, '_blank');
         }
 
+        document.getElementById('secret-phrase').addEventListener('keypress', e => {
+            if (e.key === 'Enter') checkSecretPhrase();
+        });
 
-        // Project Filtering
+        /* ==================== GHIBLI AVATAR ==================== */
+        const avatarFrame = document.getElementById('avatar-frame');
+        const bubble = document.getElementById('speech-bubble');
+        const petMeter = document.getElementById('pet-meter');
+        let bubbleTimer = null;
+        let petCount = 0;
+        let introPlayed = false;
+
+        const introMessages = [
+            "Hello~ 😽",
+            "How YOU doin'? 😏"
+        ];
+
+        const petMessages = [
+            "purrrrrr… 😌",
+            "Oh, hi again. Missed me? 😏",
+            "You've got gentle hands~",
+            "Careful, I fall fast 💘",
+            "*bats eyelashes*",
+            "That's the spot 😽",
+            "Keep that up and I'm yours.",
+            "You come here often? 😼",
+            "Smooth. Very smooth.",
+            "meow~ 💕"
+        ];
+
+        function sayBubble(text, duration = 2200) {
+            clearTimeout(bubbleTimer);
+            bubble.textContent = text;
+            bubble.classList.add('show');
+            bubbleTimer = setTimeout(() => bubble.classList.remove('show'), duration);
+        }
+
+        function playIntro() {
+            if (introPlayed) return;
+            introPlayed = true;
+            introMessages.forEach((msg, i) => {
+                setTimeout(() => {
+                    sayBubble(msg, i === introMessages.length - 1 ? 3000 : 2100);
+                    avatarFrame.classList.remove('wiggle');
+                    void avatarFrame.offsetWidth;
+                    avatarFrame.classList.add('wiggle');
+                }, 900 + i * 2400);
+            });
+        }
+
+        avatarFrame.addEventListener('click', () => {
+            petCount++;
+            const msg = petCount === 10
+                ? "TEN pets?! Buy me dinner first… okay fine, I'm yours 😻"
+                : petMessages[Math.floor(Math.random() * petMessages.length)];
+            sayBubble(msg, 2400);
+            avatarFrame.classList.remove('wiggle');
+            void avatarFrame.offsetWidth;
+            avatarFrame.classList.add('wiggle');
+            petMeter.textContent = `pets received: ${petCount} ${petCount >= 10 ? '· max affection reached 💛' : ''}`;
+            petMeter.classList.add('show');
+            spawnHeart();
+        });
+
+        function spawnHeart() {
+            const heart = document.createElement('div');
+            heart.textContent = ['💛', '✨', '🐾', '💚'][Math.floor(Math.random() * 4)];
+            heart.style.cssText = `position:absolute; left:${20 + Math.random() * 60}%; top:${30 + Math.random() * 40}%; font-size:1.6rem; pointer-events:none; z-index:20; transition:all 1.4s ease-out; opacity:1;`;
+            avatarFrame.appendChild(heart);
+            requestAnimationFrame(() => {
+                heart.style.transform = `translateY(-90px) rotate(${(Math.random() - 0.5) * 60}deg)`;
+                heart.style.opacity = '0';
+            });
+            setTimeout(() => heart.remove(), 1500);
+        }
+
+        // 3D tilt following the mouse
+        const stage = document.getElementById('avatar-stage');
+        stage.addEventListener('mousemove', e => {
+            const rect = avatarFrame.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+            avatarFrame.style.transform = `rotateY(${x * 10}deg) rotateX(${-y * 8}deg)`;
+            avatarFrame.style.animationPlayState = 'paused';
+        });
+        stage.addEventListener('mouseleave', () => {
+            avatarFrame.style.transform = '';
+            avatarFrame.style.animationPlayState = 'running';
+        });
+
+        // Random idle chatter every ~14s when on home page
+        const idleLines = [
+            "Still here? I like that 😏",
+            "*ear twitch*",
+            "*wink*",
+            "You have nice taste in websites~",
+            "*stares at cursor like it's a laser pointer*"
+        ];
+        setInterval(() => {
+            const homeActive = document.getElementById('home').classList.contains('active');
+            if (homeActive && introPlayed && Math.random() < 0.6 && !bubble.classList.contains('show')) {
+                sayBubble(idleLines[Math.floor(Math.random() * idleLines.length)], 2600);
+            }
+        }, 14000);
+
+        /* Soot sprites around the avatar */
+        function makeSootSVG() {
+            return `<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                <g>
+                    ${Array.from({length: 14}, () => {
+                        const a = Math.random() * Math.PI * 2;
+                        const r = 13 + Math.random() * 6;
+                        return `<line x1="20" y1="20" x2="${20 + Math.cos(a) * r}" y2="${20 + Math.sin(a) * r}" stroke="#2b2b2b" stroke-width="1.6" stroke-linecap="round"/>`;
+                    }).join('')}
+                    <circle cx="20" cy="20" r="12" fill="#2b2b2b"/>
+                    <circle cx="16" cy="18" r="3.4" fill="white"/>
+                    <circle cx="24" cy="18" r="3.4" fill="white"/>
+                    <circle cx="16.8" cy="18.6" r="1.5" fill="black"/>
+                    <circle cx="24.8" cy="18.6" r="1.5" fill="black"/>
+                </g>
+            </svg>`;
+        }
+
+        function spawnSootSprites() {
+            const positions = [
+                { left: '-8%', top: '12%' }, { right: '-9%', top: '38%' },
+                { left: '-5%', bottom: '18%' }, { right: '-4%', bottom: '6%' }
+            ];
+            positions.forEach((pos, i) => {
+                const s = document.createElement('div');
+                s.className = 'soot';
+                s.innerHTML = makeSootSVG();
+                Object.assign(s.style, pos);
+                s.style.animationDelay = `${i * 1.7}s`;
+                s.style.animationDuration = `${8 + i * 1.3}s`;
+                stage.appendChild(s);
+            });
+        }
+
+        /* Drifting clouds on home background */
+        function spawnClouds() {
+            const bg = document.getElementById('home-bg');
+            for (let i = 0; i < 4; i++) {
+                const c = document.createElement('div');
+                c.className = 'cloud';
+                const w = 120 + Math.random() * 140;
+                c.style.width = w + 'px';
+                c.style.height = w * 0.35 + 'px';
+                c.style.top = (5 + Math.random() * 55) + '%';
+                c.style.animationDuration = (45 + Math.random() * 40) + 's';
+                c.style.animationDelay = -(Math.random() * 45) + 's';
+                bg.appendChild(c);
+            }
+        }
+
+        /* ==================== RESUME PAGE ==================== */
+        function showResumeSection(section, e) {
+            document.querySelectorAll('.resume-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.resume-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('resume-' + section).classList.add('active');
+            if (e) e.target.classList.add('active');
+            revealSection(document.getElementById('resume-' + section));
+        }
+
+        function toggleTimelineItem(item) {
+            item.classList.toggle('open');
+        }
+
+        function revealSection(container) {
+            const items = container.querySelectorAll('.timeline-item, .award-card, .skill-chip');
+            items.forEach((el, i) => {
+                el.classList.remove('revealed');
+                setTimeout(() => el.classList.add('revealed'), 80 + i * 90);
+            });
+        }
+
+        let countersDone = false;
+        function animateCounters() {
+            if (countersDone) return;
+            countersDone = true;
+            document.querySelectorAll('.stat-chip .num').forEach(el => {
+                const target = parseInt(el.dataset.count, 10);
+                let current = 0;
+                const step = () => {
+                    current++;
+                    el.textContent = current;
+                    if (current < target) setTimeout(step, 900 / target);
+                };
+                setTimeout(step, 300);
+            });
+        }
+
+        function initResumeAnimations() {
+            animateCounters();
+            revealSection(document.querySelector('.resume-section.active'));
+        }
+
+        /* ==================== PROJECT / BLOG FILTERS ==================== */
         function filterProjects(category) {
             const cards = document.querySelectorAll('.project-card');
-            const buttons = document.querySelectorAll('.category-btn');
-            
-            // Update button states
-            buttons.forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-            
-            // Filter cards
             cards.forEach(card => {
-                if (category === 'all' || card.getAttribute('data-category') === category) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
+                card.style.display = (category === 'all' || card.getAttribute('data-category') === category) ? 'block' : 'none';
             });
         }
 
-        // Blog Post Filtering
         function filterPosts(category) {
             const posts = document.querySelectorAll('.blog-post');
-            const buttons = document.querySelectorAll('.filter-btn');
-            
-            // Update button states
-            buttons.forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-            
-            // Filter posts
             posts.forEach(post => {
-                if (category === 'all' || post.getAttribute('data-category') === category) {
-                    post.style.display = 'block';
-                } else {
-                    post.style.display = 'none';
-                }
+                post.style.display = (category === 'all' || post.getAttribute('data-category') === category) ? 'block' : 'none';
             });
         }
 
-        // Blog Post Click Handler
         document.querySelectorAll('.blog-post').forEach(post => {
-            post.addEventListener('click', function() {
+            post.addEventListener('click', function () {
                 const title = this.querySelector('h3').textContent;
                 alert(`Full post viewer coming soon! 📝\n\n"${title}" would open in a dedicated reader view.`);
             });
         });
 
-        // Project Card Click Handler
-        document.querySelectorAll('.project-card').forEach(card => {
-            card.addEventListener('click', function(e) {
-                // Don't trigger if clicking on a link
-                if (e.target.tagName === 'A') return;
-                
-                const title = this.querySelector('h3').textContent;
-                const description = this.querySelector('p').textContent;
-                alert(`Project Details:\n\n${title}\n\n${description}\n\nDetailed project pages coming soon!`);
-            });
-        });
-
-        // Secret phrase input handler
-        document.getElementById('secret-phrase').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                checkSecretPhrase();
-            }
-        });
-
-        // Smooth scrolling for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-
-        // Add some interactive elements
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-2px) scale(1.02)';
-            });
-            
-            btn.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(-2px) scale(1)';
-            });
-        });
-
-        // Floating animation for home page elements
-        function createFloatingElements() {
-            const homeContainer = document.querySelector('.home-container');
-            if (!homeContainer) return;
-            
-            // Add some random floating elements
-            for (let i = 0; i < 3; i++) {
-                const element = document.createElement('div');
-                element.className = 'floating-element';
-                element.style.left = Math.random() * 100 + '%';
-                element.style.top = Math.random() * 100 + '%';
-                element.style.animationDelay = Math.random() * 6 + 's';
-                homeContainer.appendChild(element);
-            }
-        }
-
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', function() {
-            // Set initial page
-            showPage('home');
-            
-            // Add floating elements
-            createFloatingElements();
-            
-            // Add some entrance animations
-            const homeContent = document.querySelector('.home-content');
-            if (homeContent) {
-                homeContent.style.opacity = '0';
-                homeContent.style.transform = 'translateY(30px)';
-                
-                setTimeout(() => {
-                    homeContent.style.transition = 'all 0.8s ease-out';
-                    homeContent.style.opacity = '1';
-                    homeContent.style.transform = 'translateY(0)';
-                }, 100);
-            }
-        });
-
-        // Add some fun Easter eggs
-        let clickCount = 0;
-        document.querySelector('.logo').addEventListener('click', function() {
-            clickCount++;
-            if (clickCount === 5) {
+        /* ==================== EASTER EGGS ==================== */
+        let logoClicks = 0;
+        document.querySelector('.logo').addEventListener('click', function () {
+            logoClicks++;
+            if (logoClicks === 5) {
                 this.style.animation = 'float 0.5s ease-in-out';
-                setTimeout(() => {
-                    this.style.animation = '';
-                }, 500);
-                clickCount = 0;
+                sayBubble("You found the logo easter egg! 🥚");
+                setTimeout(() => { this.style.animation = ''; }, 500);
+                logoClicks = 0;
             }
         });
 
-        // Konami code for fun
         let konamiCode = [];
-        const konamiSequence = [
-            'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
-            'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
-            'KeyB', 'KeyA'
-        ];
-
-        document.addEventListener('keydown', function(e) {
+        const konamiSequence = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','KeyB','KeyA'];
+        document.addEventListener('keydown', e => {
             konamiCode.push(e.code);
-            if (konamiCode.length > konamiSequence.length) {
-                konamiCode.shift();
-            }
-            
+            if (konamiCode.length > konamiSequence.length) konamiCode.shift();
             if (konamiCode.join('') === konamiSequence.join('')) {
                 hasAccess = true;
-                alert('🎉 Konami code activated! Secret access granted!');
+                sayBubble("🎉 Konami code! Secret access granted, nya~");
                 konamiCode = [];
             }
         });
 
-        // Add some particle effects for fun
+        /* Click particles on nav buttons */
         function createParticle(x, y) {
-            const particle = document.createElement('div');
-            particle.style.position = 'fixed';
-            particle.style.left = x + 'px';
-            particle.style.top = y + 'px';
-            particle.style.width = '6px';
-            particle.style.height = '6px';
-            particle.style.background = `linear-gradient(45deg, 
-                hsl(${Math.random() * 360}, 70%, 60%), 
-                hsl(${Math.random() * 360}, 70%, 60%))`;
-            particle.style.borderRadius = '50%';
-            particle.style.pointerEvents = 'none';
-            particle.style.zIndex = '9999';
-            particle.style.animation = 'float 2s ease-out forwards';
-            
-            document.body.appendChild(particle);
-            
-            setTimeout(() => {
-                particle.remove();
-            }, 2000);
+            const p = document.createElement('div');
+            p.style.cssText = `position:fixed; left:${x}px; top:${y}px; width:6px; height:6px; border-radius:50%; pointer-events:none; z-index:9999; animation:float 2s ease-out forwards; background:linear-gradient(45deg, hsl(${Math.random()*60+20},70%,60%), hsl(${Math.random()*100+80},60%,55%));`;
+            document.body.appendChild(p);
+            setTimeout(() => p.remove(), 2000);
         }
 
-        // Add click particles to nav buttons
         document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
+            btn.addEventListener('click', e => {
                 for (let i = 0; i < 5; i++) {
-                    setTimeout(() => {
-                        createParticle(
-                            e.clientX + (Math.random() - 0.5) * 30,
-                            e.clientY + (Math.random() - 0.5) * 30
-                        );
-                    }, i * 100);
+                    setTimeout(() => createParticle(e.clientX + (Math.random()-0.5)*30, e.clientY + (Math.random()-0.5)*30), i * 100);
                 }
             });
         });
 
-        // Mobile menu toggle (for future enhancement)
-        let mobileMenuOpen = false;
-        function toggleMobileMenu() {
-            const navLinks = document.querySelector('.nav-links');
-            mobileMenuOpen = !mobileMenuOpen;
-            
-            if (mobileMenuOpen) {
-                navLinks.style.display = 'flex';
-                navLinks.style.flexDirection = 'column';
-                navLinks.style.position = 'absolute';
-                navLinks.style.top = '100%';
-                navLinks.style.left = '0';
-                navLinks.style.right = '0';
-                navLinks.style.background = 'rgba(255, 255, 255, 0.95)';
-                navLinks.style.padding = '1rem';
-                navLinks.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
-            } else {
-                navLinks.style.display = 'none';
-            }
-        }
-
-        // Add responsive behavior
-        function handleResize() {
-            if (window.innerWidth > 768) {
-                document.querySelector('.nav-links').style.display = 'flex';
-                mobileMenuOpen = false;
-            } else {
-                document.querySelector('.nav-links').style.display = 'none';
-            }
-        }
-
-        window.addEventListener('resize', handleResize);
-        handleResize(); // Initial call
+        /* ==================== INIT ==================== */
+        document.addEventListener('DOMContentLoaded', () => {
+            showPage('home');
+            spawnClouds();
+            spawnSootSprites();
+            setTimeout(playIntro, 400);
+        });
     </script>
 </body>
 </html>
